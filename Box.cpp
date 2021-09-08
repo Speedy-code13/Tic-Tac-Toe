@@ -93,4 +93,5 @@ void Box::reset()
 	state = State::None;
 
 	shape.setTextureRect(sf::IntRect());
+	turn = Turn::X;
 }

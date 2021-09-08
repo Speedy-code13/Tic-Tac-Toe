@@ -269,5 +269,6 @@ void Game::reset()
 
 	canDraw = false;
 	resetClock.restart();
+
 }
 
