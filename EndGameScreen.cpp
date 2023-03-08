@@ -13,7 +13,7 @@ EndGameScreen::EndGameScreen(const Winner& winner, sf::RenderWindow& window, con
 
 void EndGameScreen::initVariables()
 {
-	backgroundSpeed = 700.f;
+	backgroundSpeed = 450.f;
 	backgroundLoaded = false;
 	scoreX = 0;
 	scoreO = 0;

@@ -1,3 +1,11 @@
 ﻿  stdafx.cpp
+  Box.cpp
+  EndGameScreen.cpp
+  Game.cpp
   Main.cpp
-  Tic Tac Toe.vcxproj -> C:\Dev\Tic Tac Toe\Debug\Tic Tac Toe.exe
+  Generating Code...
+C:\Users\rereg\Documents\GitHub\Tic-Tac-Toe\Game.cpp(99): warning C4172: returning address of local variable or temporary
+C:\Users\rereg\Documents\GitHub\Tic-Tac-Toe\Game.cpp(102): warning C4172: returning address of local variable or temporary
+C:\Users\rereg\Documents\GitHub\Tic-Tac-Toe\Game.cpp(106): warning C4172: returning address of local variable or temporary
+C:\Users\rereg\Documents\GitHub\Tic-Tac-Toe\Game.cpp(109): warning C4172: returning address of local variable or temporary
+  Tic Tac Toe.vcxproj -> C:\Users\rereg\Documents\GitHub\Tic-Tac-Toe\Debug\Tic Tac Toe.exe
