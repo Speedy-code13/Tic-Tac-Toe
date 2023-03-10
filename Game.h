@@ -4,18 +4,15 @@
 
 struct WinCombination
 {
-	short unsigned comb1;
-	short unsigned comb2;
-	short unsigned comb3;
+	short unsigned pos1;
+	short unsigned pos2;
+	short unsigned pos3;
 
-	void init(short unsigned comb1, short unsigned comb2, short unsigned comb3)
+	void init(short unsigned pos1, short unsigned pos2, short unsigned pos3) 
 	{
-		this->comb1 = comb1;
-		this->comb2 = comb2;
-		this->comb3 = comb3;
+		this->pos1 = pos1, this->pos2 = pos2, this->pos3 = pos3;
 	}
-	
-};
+};	
 class Game
 {
 private:
@@ -25,6 +22,8 @@ private:
 	std::shared_ptr<sf::RenderWindow> window;
 
 	std::unordered_map<std::string, sf::Texture> textures;
+	std::unordered_map<std::string, sf::Sound> sounds;
+	std::unordered_map<std::string, sf::SoundBuffer> soundBuffers;
 	sf::Font font;
 
 	sf::Vector2f mousePos;
@@ -33,22 +32,20 @@ private:
 	sf::Clock resetClock;
 	float dt;
 
-	sf::RectangleShape background;
+	sf::RectangleShape	background;
 
 	std::array<std::unique_ptr<Box>, 9> boxes;
 
 	float boxWidth;
 	float boxHeight;
 
-	bool shouldCheckForWin;
-
 	sf::IntRect oRect;
 	sf::IntRect xRect;
+	
 
 	std::array<WinCombination, 8> winCombinations;
 
-
-	Winner winner;
+	GameState gameState;
 	std::unique_ptr<EndGameScreen> endScreen;
 
 	bool inEndScreen;
@@ -66,20 +63,23 @@ private:
 	void positionBoxes();
 	void initBoxes();
 	void initEndScreen();
+	void initSounds();
+	void initSound(std::string name, std::string path, float volume = 100.f);
 	
 
 	//Core 
 
-	bool checkTeamForWin(State team, int winnerPos1, int winnerPos2, int winnerPos3);
-	void updateShouldCheckForWin();
+	bool hasTeamWon(BoxState team, int winnerPos1, int winnerPos2, int winnerPos3);
 	const bool checkForDraw();
-	const Winner& getWinner();
+	const GameState& getGameState();
+	void forceFinishBoxesAnimations();
 
 	void reset();
 
+	void boxesOnMouseClick();
 	void updateCanDraw(); 
 	void updateEvents();
-	void updateWin();
+	void updateGameState();
 	void updateDt();
 
 	void update();

@@ -11,6 +11,7 @@ Game::Game()
 	initCombinations();
 	initBoxes();
 	initEndScreen();
+	initSounds();
 }
 
 Game::~Game()
@@ -53,36 +54,38 @@ void Game::initBackground()
 
 void Game::positionBoxes()
 {
-	const float distanceBetweenBoxes = 10.f;
+	const float distanceBetweenBoxesX = 22.f;
+	const float distanceBetweenBoxesY = 21.f;
 
-	boxes[0]->setPosition(sf::Vector2f(27.f, 34.f));
-	boxes[1]->setPosition(sf::Vector2f(boxes[0]->getPosition().x + distanceBetweenBoxes + boxWidth, boxes[0]->getPosition().y));
-	boxes[2]->setPosition(sf::Vector2f(boxes[0]->getPosition().x + (distanceBetweenBoxes + boxWidth) * 2, boxes[0]->getPosition().y));
-	boxes[3]->setPosition(sf::Vector2f(boxes[0]->getPosition().x, boxes[0]->getPosition().y + distanceBetweenBoxes + boxHeight));
-	boxes[4]->setPosition(sf::Vector2f(boxes[0]->getPosition().x + distanceBetweenBoxes + boxWidth, boxes[0]->getPosition().y + distanceBetweenBoxes + boxHeight));
-	boxes[5]->setPosition(sf::Vector2f(boxes[0]->getPosition().x + (distanceBetweenBoxes + boxWidth) * 2, boxes[0]->getPosition().y + distanceBetweenBoxes + boxHeight));
-	boxes[6]->setPosition(sf::Vector2f(boxes[0]->getPosition().x, boxes[0]->getPosition().y + (distanceBetweenBoxes + boxHeight)* 2));
-	boxes[7]->setPosition(sf::Vector2f(boxes[0]->getPosition().x + distanceBetweenBoxes + boxWidth, boxes[0]->getPosition().y + (distanceBetweenBoxes + boxHeight) * 2));
-	boxes[8]->setPosition(sf::Vector2f(boxes[0]->getPosition().x + (distanceBetweenBoxes + boxWidth) * 2, boxes[0]->getPosition().y + (distanceBetweenBoxes + boxHeight) * 2));
+	boxes[0]->setPosition(sf::Vector2f(34.f, 39.f));
+	boxes[1]->setPosition(sf::Vector2f(boxes[0]->getPosition().x + distanceBetweenBoxesX + boxWidth, boxes[0]->getPosition().y));
+	boxes[2]->setPosition(sf::Vector2f(boxes[0]->getPosition().x + (distanceBetweenBoxesX + boxWidth) * 2, boxes[0]->getPosition().y));
+	boxes[3]->setPosition(sf::Vector2f(boxes[0]->getPosition().x, boxes[0]->getPosition().y + distanceBetweenBoxesY + boxHeight));
+	boxes[4]->setPosition(sf::Vector2f(boxes[0]->getPosition().x + distanceBetweenBoxesX + boxWidth, boxes[0]->getPosition().y + distanceBetweenBoxesY + boxHeight));
+	boxes[5]->setPosition(sf::Vector2f(boxes[0]->getPosition().x + (distanceBetweenBoxesX + boxWidth) * 2, boxes[0]->getPosition().y + distanceBetweenBoxesY + boxHeight));
+	boxes[6]->setPosition(sf::Vector2f(boxes[0]->getPosition().x, boxes[0]->getPosition().y + (distanceBetweenBoxesY + boxHeight)* 2));
+	boxes[7]->setPosition(sf::Vector2f(boxes[0]->getPosition().x + distanceBetweenBoxesX + boxWidth, boxes[0]->getPosition().y + (distanceBetweenBoxesY + boxHeight) * 2));
+	boxes[8]->setPosition(sf::Vector2f(boxes[0]->getPosition().x + (distanceBetweenBoxesX + boxWidth) * 2, boxes[0]->getPosition().y + (distanceBetweenBoxesY + boxHeight) * 2));
 }
 
 void Game::initBoxes()
 {
-	boxWidth = 160.f;
-	boxHeight = 155.f;
+	boxWidth = 148.f;
+	boxHeight = 145.f;
 	oRect = sf::IntRect(0, 0, static_cast<int>(boxWidth), static_cast<int>(boxHeight));
 	xRect = sf::IntRect(static_cast<int>(boxWidth), 0, static_cast<int>(boxWidth), static_cast<int>(boxHeight));
 
-	for (auto& i : boxes)	
+	for (auto& box : boxes)	
 	{
-		i = std::make_unique<Box>(textures["BOX"], sf::Vector2f(boxWidth, boxHeight), oRect, xRect, *window, canDraw);
+		box = std::make_unique<Box>(textures["BOX"], sf::Vector2f(boxWidth, boxHeight), oRect, xRect, *window,
+			canDraw, dt, sounds);
 	}
 	positionBoxes();
 }
 
 void Game::initEndScreen()
 {
-	endScreen = std::make_unique<EndGameScreen>(winner, *window, font, dt, 
+	endScreen = std::make_unique<EndGameScreen>(gameState, *window, font, dt, sounds, 
 		[&]()
 		{
 			reset();
@@ -90,27 +93,48 @@ void Game::initEndScreen()
 	);
 }
 
-const Winner& Game::getWinner()
+void Game::initSounds()
+{
+	initSound("DRAW_BOX", "rsc/sfx/clickselect2-92097.wav", 35.f);
+	initSound("RESTART_BUTTON", "rsc/sfx/select-sound-121244.wav", 50.f);
+	initSound("ROUND_OVER", "rsc/sfx/mixkit-completion-of-a-level-2063.wav");
+}
+
+void Game::initSound(std::string name, std::string path, float volume)
+{
+	soundBuffers[name].loadFromFile(path);
+	sounds[name].setBuffer(soundBuffers[name]);
+	sounds[name].setVolume(volume);
+}
+
+const GameState& Game::getGameState()
 {
 	//Lazy method using brute force
-	for (auto& i : winCombinations)
+	for (auto& winCombination : winCombinations)
 	{
-		if (checkTeamForWin(State::X, i.comb1, i.comb2, i.comb3))
-			return Winner::X;
+		if (hasTeamWon(BoxState::X, winCombination.pos1, winCombination.pos2, winCombination.pos3))
+			return GameState::XWin;
 
-		if (checkTeamForWin(State::O, i.comb1, i.comb2, i.comb3))
-			return Winner::O;
+		if (hasTeamWon(BoxState::O, winCombination.pos1, winCombination.pos2, winCombination.pos3))
+			return GameState::OWin;
 	}
 
 	if (checkForDraw())
-		return Winner::Draw;
+		return GameState::Draw;
 
-	//Else
-	return Winner::None;
+	return GameState::Ongoing;
 
 }
 
-bool Game::checkTeamForWin(State team, int winnerPos1, int winnerPos2, int winnerPos3)
+void Game::forceFinishBoxesAnimations()
+{
+	for(auto& box : boxes)
+	{
+		box->forceFinishAnimation();
+	}
+}
+
+bool Game::hasTeamWon(BoxState team, int winnerPos1, int winnerPos2, int winnerPos3)
 {
 	if (boxes[winnerPos1]->getState() == team && boxes[winnerPos2]->getState() == team && boxes[winnerPos3]->getState() == team)
 		return true;	
@@ -118,38 +142,26 @@ bool Game::checkTeamForWin(State team, int winnerPos1, int winnerPos2, int winne
 	return false;
 }
 
-void Game::updateShouldCheckForWin()
-{
-	//If any box is drawn shouldCheckForWin is true
-	for (auto& i : boxes)
-	{
-		if (i->drawnBox())
-		{
-			shouldCheckForWin = true;
-			return;
-		}
-	}
-}
-
 const bool Game::checkForDraw()
 {
 	int numOfOccupiedBoxes = 0;
-	for (auto& i : boxes)
+	for (auto& box : boxes)
 	{
-		State currBoxState = i->getState();
+		BoxState currBoxState = box->getState();
 
-		if (currBoxState == State::X || currBoxState == State::O)
+		if (currBoxState == BoxState::X || currBoxState == BoxState::O)
 		{
 			numOfOccupiedBoxes++;
-			continue;
 		}
-
-		break;
 	}
-	if (numOfOccupiedBoxes == boxes.size())
-		return true;
+	return numOfOccupiedBoxes == boxes.size();
+}
 
-	return false;
+void Game::boxesOnMouseClick()
+{
+	for (auto& box : boxes) {
+		box->onMouseClick(mousePos);
+	}
 }
 
 void Game::updateCanDraw()
@@ -164,9 +176,14 @@ void Game::updateEvents()
 	{
 		switch (event.type)
 		{
-		case sf::Event::Closed:
-			window->close();
-			break;
+			case sf::Event::Closed:
+				window->close();
+				break;
+
+			case sf::Event::MouseButtonReleased:
+				if(!inEndScreen)
+					boxesOnMouseClick();
+				break;
 		}
 	}
 }
@@ -179,18 +196,19 @@ void Game::update()
 
 	updateDt();
 
-	if (!inEndScreen)
+	if (inEndScreen)
+	{
+		endScreen->update(mousePos);
+	}
+	else
 	{
 		updateCanDraw();
 
 		for (auto& i : boxes)
 			i->update(mousePos);
 
-		updateWin();
+		updateGameState();
 	}
-	else
-		endScreen->update(mousePos);
-
 }
 
 void Game::render()
@@ -208,21 +226,17 @@ void Game::render()
 	window->display();
 }
 
-void Game::updateWin()
+void Game::updateGameState()
 {
-	updateShouldCheckForWin();
+	this->gameState = getGameState();
 
-	if (shouldCheckForWin)
+	if (this->gameState != GameState::Ongoing)
 	{
-		winner = getWinner();
-		if (winner != Winner::None)
-		{
-			endScreen->teamHasWon();
-			inEndScreen = true;
-		}
-			shouldCheckForWin = false;
+		sounds["ROUND_OVER"].play();
+		endScreen->onRoundFinish();
+		this->forceFinishBoxesAnimations();
+		this->inEndScreen = true;
 	}
-
 }
 
 void Game::updateDt()
@@ -253,11 +267,10 @@ void Game::initCombinations()
 
 void Game::initVariables()
 {
-	shouldCheckForWin = false;
 	inEndScreen = false;	
 	canDraw = false;
 	dt = 0.f;
-	winner = Winner::None;
+	gameState = GameState::Ongoing;
 }
 
 void Game::reset()

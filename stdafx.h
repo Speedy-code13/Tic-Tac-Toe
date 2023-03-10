@@ -7,7 +7,6 @@
 #include <unordered_map>
 #include <functional>
 
-
 #include <SFML/Window.hpp>
 #include <SFML/System.hpp>
 #include <SFML/Graphics.hpp>

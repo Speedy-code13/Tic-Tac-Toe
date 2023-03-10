@@ -1,18 +1,19 @@
 #pragma once
-enum class Winner { None = 0, Draw, X, O };
+enum class GameState { Ongoing = 0, Draw, XWin, OWin };
 class EndGameScreen
 {
 private:
-	const Winner& winner;
+	const GameState& gameState;
     sf::RenderWindow& window;
 	const sf::Font& font;
 	const float& dt;
 
 	std::unordered_map<std::string, sf::Texture> textures;
+	std::unordered_map<std::string, sf::Sound>& sounds;
 	sf::RectangleShape background;
 	sf::RectangleShape reloadButton;
 
-	bool backgroundLoaded;
+	bool backgroundAnimated;
 	float backgroundSpeed;
 
 	sf::Text winText;
@@ -35,9 +36,10 @@ private:
 	void reset();
 
 public:
-	EndGameScreen(const Winner& winner, sf::RenderWindow& window, const sf::Font& font, const float& dt, std::function<void()> gameReset);
+	EndGameScreen(const GameState& gameState, sf::RenderWindow& window, const sf::Font& font, 
+		const float& dt, std::unordered_map<std::string, sf::Sound>& sounds, std::function<void()> gameReset);
 
-	void teamHasWon();
+	void onRoundFinish();
 
 	void update(const sf::Vector2f& mousePos);
 	void render();

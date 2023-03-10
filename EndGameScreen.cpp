@@ -1,8 +1,9 @@
 #include "stdafx.h"
 #include "EndGameScreen.h"
 
-EndGameScreen::EndGameScreen(const Winner& winner, sf::RenderWindow& window, const sf::Font& font, const float& dt, std::function<void()> gameReset)
-	: winner(winner), window(window), font(font), dt(dt), gameReset(gameReset)
+EndGameScreen::EndGameScreen(const GameState& gameState, sf::RenderWindow& window, const sf::Font& font,
+	const float& dt, std::unordered_map<std::string, sf::Sound>& sounds, std::function<void()> gameReset)
+	: gameState(gameState), window(window), font(font), dt(dt), gameReset(gameReset), sounds(sounds)
 {
 	initVariables();
 	initTextures();
@@ -13,8 +14,8 @@ EndGameScreen::EndGameScreen(const Winner& winner, sf::RenderWindow& window, con
 
 void EndGameScreen::initVariables()
 {
-	backgroundSpeed = 450.f;
-	backgroundLoaded = false;
+	backgroundSpeed = 550.f;
+	backgroundAnimated = false;
 	scoreX = 0;
 	scoreO = 0;
 }
@@ -57,31 +58,31 @@ void EndGameScreen::initText()
 void EndGameScreen::reset()
 {
 	background.setPosition({ 0.f, -background.getSize().y });
-	backgroundLoaded = false;
+	backgroundAnimated = false;
 	gameReset();
 }
 
-void EndGameScreen::teamHasWon()
+void EndGameScreen::onRoundFinish()
 {
-	switch (winner)
+	switch (gameState)
 	{
-	case Winner::O:
-		scoreO++;
-		winText.setString("O has won!");
-		winText.setPosition({ window.getSize().x / 2.f - winText.getGlobalBounds().width / 2.f, 0.f });
-		winText.setFillColor(sf::Color::Cyan);
-		break;
-	case Winner::X:
-		scoreX++;
-		winText.setString("X has won!");
-		winText.setPosition({ window.getSize().x / 2.f - winText.getGlobalBounds().width / 2.f, 0.f });
-		winText.setFillColor(sf::Color::Red);
-		break;
-	case Winner::Draw:
-		winText.setString("DRAW!");
-		winText.setPosition({ window.getSize().x / 2.f - winText.getGlobalBounds().width / 2.f, 0.f });
-		winText.setFillColor(sf::Color::Green);
-		break;
+		case GameState::OWin:
+			scoreO++;
+			winText.setString("O has won!");
+			winText.setPosition({ window.getSize().x / 2.f - winText.getGlobalBounds().width / 2.f, 0.f });
+			winText.setFillColor(sf::Color::Cyan);
+			break;
+		case GameState::XWin:
+			scoreX++;
+			winText.setString("X has won!");
+			winText.setPosition({ window.getSize().x / 2.f - winText.getGlobalBounds().width / 2.f, 0.f });
+			winText.setFillColor(sf::Color::Red);
+			break;
+		case GameState::Draw:
+			winText.setString("DRAW!");
+			winText.setPosition({ window.getSize().x / 2.f - winText.getGlobalBounds().width / 2.f, 0.f });
+			winText.setFillColor(sf::Color::Green);
+			break;
 	}
 	scoreText.setString(std::to_string(scoreO) + '-' + std::to_string(scoreX));
 	scoreText.setPosition({ window.getSize().x / 2.f - scoreText.getGlobalBounds().width / 2.f, (0.f + reloadButton.getPosition().y) / 2.f - scoreText.getGlobalBounds().height });
@@ -89,15 +90,17 @@ void EndGameScreen::teamHasWon()
 
 void EndGameScreen::update(const sf::Vector2f& mousePos)
 {
-	backgroundLoaded = !(background.getPosition().y <= -20.f);
-	if (!backgroundLoaded)
+	backgroundAnimated = !(background.getPosition().y <= -20.f);
+	if (!backgroundAnimated) {
 		background.move(0.f, backgroundSpeed * dt);
+		return;
+	}
 
-	else {
-		if (reloadButton.getGlobalBounds().contains(mousePos))
-		{
-			if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left))
-				reset();
+	if (reloadButton.getGlobalBounds().contains(mousePos)) // resetting the game when player presses the reload button
+	{
+		if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left)) {
+			reset();
+			sounds["RESTART_BUTTON"].play();
 		}
 	}
 	
@@ -107,11 +110,10 @@ void EndGameScreen::render()
 {
 	window.draw(background);
 
-	if (backgroundLoaded)
-	{
-		window.draw(winText);
-		window.draw(scoreText);
-		window.draw(reloadButton);
-	}
+	if (!backgroundAnimated) return;
+
+	window.draw(winText);
+	window.draw(scoreText);
+	window.draw(reloadButton);
 }
 
