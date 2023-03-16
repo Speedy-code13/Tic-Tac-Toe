@@ -44,6 +44,7 @@ private:
 	
 
 	std::array<WinCombination, 8> winCombinations;
+	WinCombination* currentWinCombination;
 
 	GameState gameState;
 	std::unique_ptr<EndGameScreen> endScreen;

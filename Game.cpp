@@ -112,15 +112,22 @@ const GameState& Game::getGameState()
 	//Lazy method using brute force
 	for (auto& winCombination : winCombinations)
 	{
-		if (hasTeamWon(BoxState::X, winCombination.pos1, winCombination.pos2, winCombination.pos3))
+		if (hasTeamWon(BoxState::X, winCombination.pos1, winCombination.pos2, winCombination.pos3)) {
+			currentWinCombination = &winCombination;
 			return GameState::XWin;
+		}
 
-		if (hasTeamWon(BoxState::O, winCombination.pos1, winCombination.pos2, winCombination.pos3))
+		if (hasTeamWon(BoxState::O, winCombination.pos1, winCombination.pos2, winCombination.pos3)) {
+			currentWinCombination = &winCombination;
 			return GameState::OWin;
+		}
+			
 	}
 
-	if (checkForDraw())
+	if (checkForDraw()) {
+		currentWinCombination = nullptr;
 		return GameState::Draw;
+	}
 
 	return GameState::Ongoing;
 
@@ -206,8 +213,6 @@ void Game::update()
 
 		for (auto& i : boxes)
 			i->update(mousePos);
-
-		updateGameState();
 	}
 }
 
@@ -271,6 +276,7 @@ void Game::initVariables()
 	canDraw = false;
 	dt = 0.f;
 	gameState = GameState::Ongoing;
+	currentWinCombination = nullptr;
 }
 
 void Game::reset()

@@ -1,4 +1,5 @@
 #pragma once
+#include "Game.h"
 enum class GameState { Ongoing = 0, Draw, XWin, OWin };
 class EndGameScreen
 {
@@ -12,6 +13,7 @@ private:
 	std::unordered_map<std::string, sf::Sound>& sounds;
 	sf::RectangleShape background;
 	sf::RectangleShape reloadButton;
+	sf::RectangleShape winnerCuttingLine;
 
 	bool backgroundAnimated;
 	float backgroundSpeed;
@@ -39,7 +41,7 @@ public:
 	EndGameScreen(const GameState& gameState, sf::RenderWindow& window, const sf::Font& font, 
 		const float& dt, std::unordered_map<std::string, sf::Sound>& sounds, std::function<void()> gameReset);
 
-	void onRoundFinish();
+	void onRoundFinish(const WinCombination& winCombination);
 
 	void update(const sf::Vector2f& mousePos);
 	void render();

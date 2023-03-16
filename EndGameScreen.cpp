@@ -28,7 +28,7 @@ void EndGameScreen::initTextures()
 void EndGameScreen::initBackground()
 {
 	background.setSize({ static_cast<float>(window.getSize().x), static_cast<float>(window.getSize().y + 25.f) });
-	background.setFillColor(sf::Color(20, 20, 20, 200));
+	background.setFillColor(sf::Color(20, 20, 20, 220));
 	background.setPosition({0.f, -background.getSize().y});
 }
 
@@ -62,7 +62,7 @@ void EndGameScreen::reset()
 	gameReset();
 }
 
-void EndGameScreen::onRoundFinish()
+void EndGameScreen::onRoundFinish(const WinCombination& winCombination)
 {
 	switch (gameState)
 	{
@@ -84,7 +84,7 @@ void EndGameScreen::onRoundFinish()
 			winText.setFillColor(sf::Color::Green);
 			break;
 	}
-	scoreText.setString(std::to_string(scoreO) + '-' + std::to_string(scoreX));
+	scoreText.setString(std::to_string(scoreO) + " - " + std::to_string(scoreX));
 	scoreText.setPosition({ window.getSize().x / 2.f - scoreText.getGlobalBounds().width / 2.f, (0.f + reloadButton.getPosition().y) / 2.f - scoreText.getGlobalBounds().height });
 }
 

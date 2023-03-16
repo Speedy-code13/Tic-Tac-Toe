@@ -107,6 +107,7 @@ void Box::onMouseClick(const sf::Vector2f& mousePos)
 			turn = Turn::X;
 		}
 	}
+
 }
 
 void Box::reset()
