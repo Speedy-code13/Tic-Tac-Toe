@@ -62,7 +62,7 @@ void EndGameScreen::reset()
 	gameReset();
 }
 
-void EndGameScreen::onRoundFinish(const WinCombination& winCombination)
+void EndGameScreen::onRoundFinish()
 {
 	switch (gameState)
 	{

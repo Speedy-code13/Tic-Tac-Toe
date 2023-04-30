@@ -1,21 +1,11 @@
-﻿  EndGameScreen.cpp
-C:\Users\rereg\Documents\GitHub\Tic-Tac-Toe\Game.h(48,12): error C3646: 'gameState': unknown override specifier
-C:\Users\rereg\Documents\GitHub\Tic-Tac-Toe\Game.h(48,21): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
-C:\Users\rereg\Documents\GitHub\Tic-Tac-Toe\Game.h(49,18): error C2065: 'EndGameScreen': undeclared identifier
-C:\Users\rereg\Documents\GitHub\Tic-Tac-Toe\Game.h(49,7): error C2923: 'std::unique_ptr': 'EndGameScreen' is not a valid template type argument for parameter '_Ty'
-C:\Users\rereg\Documents\GitHub\Tic-Tac-Toe\Game.h(49,18): message : see declaration of 'EndGameScreen'
-C:\Users\rereg\Documents\GitHub\Tic-Tac-Toe\Game.h(49,7): error C2976: 'std::unique_ptr': too few template arguments
-C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.34.31933\include\memory(3139,1): message : see declaration of 'std::unique_ptr'
-C:\Users\rereg\Documents\GitHub\Tic-Tac-Toe\Game.h(74,17): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
-C:\Users\rereg\Documents\GitHub\Tic-Tac-Toe\Game.h(74,17): error C2143: syntax error: missing ';' before '&'
-C:\Users\rereg\Documents\GitHub\Tic-Tac-Toe\Game.h(74,33): error C2238: unexpected token(s) preceding ';'
+﻿  Box.cpp
+C:\Users\rereg\Documents\Tic-Tac-Toe\Box.cpp(33,29): warning C4244: '+=': conversion from 'float' to 'sf::Uint8', possible loss of data
+  EndGameScreen.cpp
   Game.cpp
-C:\Users\rereg\Documents\GitHub\Tic-Tac-Toe\EndGameScreen.h(44,41): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
-C:\Users\rereg\Documents\GitHub\Tic-Tac-Toe\EndGameScreen.h(44,41): error C2143: syntax error: missing ',' before '&'
-C:\Users\rereg\Documents\GitHub\Tic-Tac-Toe\Game.cpp(236,12): error C2660: 'EndGameScreen::onRoundFinish': function does not take 0 arguments
-C:\Users\rereg\Documents\GitHub\Tic-Tac-Toe\EndGameScreen.h(44,7): message : see declaration of 'EndGameScreen::onRoundFinish'
-C:\Users\rereg\Documents\GitHub\Tic-Tac-Toe\Game.cpp(236,12): message : while trying to match the argument list '()'
   Main.cpp
-C:\Users\rereg\Documents\GitHub\Tic-Tac-Toe\EndGameScreen.h(44,41): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
-C:\Users\rereg\Documents\GitHub\Tic-Tac-Toe\EndGameScreen.h(44,41): error C2143: syntax error: missing ',' before '&'
   Generating Code...
+C:\Users\rereg\Documents\Tic-Tac-Toe\Game.cpp(117): warning C4172: returning address of local variable or temporary
+C:\Users\rereg\Documents\Tic-Tac-Toe\Game.cpp(122): warning C4172: returning address of local variable or temporary
+C:\Users\rereg\Documents\Tic-Tac-Toe\Game.cpp(129): warning C4172: returning address of local variable or temporary
+C:\Users\rereg\Documents\Tic-Tac-Toe\Game.cpp(132): warning C4172: returning address of local variable or temporary
+LINK : fatal error LNK1104: cannot open file 'sfml-graphics-d.lib'

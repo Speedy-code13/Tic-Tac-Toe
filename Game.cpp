@@ -188,8 +188,12 @@ void Game::updateEvents()
 				break;
 
 			case sf::Event::MouseButtonReleased:
-				if(!inEndScreen)
+				if (!inEndScreen) {
 					boxesOnMouseClick();
+					updateGameState();
+
+				}
+
 				break;
 		}
 	}
