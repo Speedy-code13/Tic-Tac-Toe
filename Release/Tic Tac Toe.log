@@ -1,7 +1,16 @@
-﻿  Game.cpp
+﻿  stdafx.cpp
+  Box.cpp
+C:\Developer\React Native\ProiectIndependent\Tic-Tac-Toe\src\Box.cpp(33,29): warning C4244: '+=': conversion from 'float' to 'sf::Uint8', possible loss of data
+  EndGameScreen.cpp
+  Game.cpp
+  Main.cpp
   Generating code
-  4 of 715 functions ( 0.6%) were compiled, the rest were copied from previous compilation.
+C:\Developer\React Native\ProiectIndependent\Tic-Tac-Toe\src\Game.cpp(117): warning C4172: returning address of local variable or temporary
+C:\Developer\React Native\ProiectIndependent\Tic-Tac-Toe\src\Game.cpp(122): warning C4172: returning address of local variable or temporary
+C:\Developer\React Native\ProiectIndependent\Tic-Tac-Toe\src\Game.cpp(129): warning C4172: returning address of local variable or temporary
+C:\Developer\React Native\ProiectIndependent\Tic-Tac-Toe\src\Game.cpp(132): warning C4172: returning address of local variable or temporary
+  54 of 720 functions ( 7.5%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
-    0 functions had inline decision re-evaluated but remain unchanged
+    2 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
-  Tic Tac Toe.vcxproj -> C:\Users\rereg\Documents\Tic-Tac-Toe\Release\Tic Tac Toe.exe
+  Tic Tac Toe.vcxproj -> C:\Developer\React Native\ProiectIndependent\Tic-Tac-Toe\Release\Tic Tac Toe.exe

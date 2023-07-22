@@ -1,3 +1,4 @@
 C:\Dev\Tic Tac Toe\Release\Tic Tac Toe.exe
 C:\Users\rereg\Documents\GitHub\Tic-Tac-Toe\Release\Tic Tac Toe.exe
 C:\Users\rereg\Documents\Tic-Tac-Toe\Release\Tic Tac Toe.exe
+C:\Developer\React Native\ProiectIndependent\Tic-Tac-Toe\Release\Tic Tac Toe.exe
